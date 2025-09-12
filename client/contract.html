@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contracts - ShareFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 18px;
+            color: var(--gray);
+            margin-right: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Filter and Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: #f9fafb;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-btn i {
+            margin-right: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Contracts Grid */
+        .contracts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .contract-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+        }
+
+        .contract-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .contract-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .contract-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .contract-status {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .contract-details {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .contract-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .contract-progress {
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--primary);
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .contract-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+
+        .contract-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-view:hover {
+            background: #bfdbfe;
+        }
+
+        .btn-sign {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .btn-sign:hover {
+            background: #bbf7d0;
+        }
+
+        .contract-btn i {
+            margin-right: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .contract-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .contract-info {
+            flex: 1;
+        }
+
+        .contract-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .contract-description {
+            color: var(--gray);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .contract-meta-detail {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-weight: 500;
+        }
+
+        .contract-actions-detail {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+
+        .action-btn i {
+            margin-right: 8px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .signature-container {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .signature-pad {
+            width: 100%;
+            height: 200px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            cursor: crosshair;
+        }
+
+        .signature-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .signature-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-clear {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+        }
+
+        .btn-clear:hover {
+            background: #fecaca;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-dark);
+        }
+
+        .upload-container {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            background: #f9fafb;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--light);
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--dark);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .file-download {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .contract-detail-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .contract-actions-detail {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 16px 0;
+            }
+            
+            .user-menu {
+                align-self: flex-end;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            
+            .contracts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contract-meta-detail {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        /* Toggle for mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="logo-text">ShareFlow Pro</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="nav-text">Projects</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="nav-text">Invoices</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-comments"></i></div>
+            <div class="nav-text">Messages</div>
+        </div>
+        
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
+            <div class="nav-text">Contracts</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="nav-text">File Sharing</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="nav-text">Calendar</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <div class="nav-text">Settings</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
+            <div class="nav-text">Help & Support</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">Contracts</h1>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search contracts...">
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-badge">3</div>
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="filter-group">
+                <div class="filter-btn active">
+                    <i class="fas fa-layer-group"></i> All Contracts
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-play-circle"></i> Active
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-pause-circle"></i> Pending
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-check-circle"></i> Completed
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-clock"></i> Expired
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="createContractBtn">
+                    <i class="fas fa-plus"></i> New Contract
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Contracts Grid -->
+        <div class="contracts-grid">
+            <div class="contract-card" data-contract-id="1">
+                <div class="contract-header">
+                    <div class="contract-name">Website Development</div>
+                    <div class="contract-status status-active">Active</div>
+                </div>
+                <div class="contract-details">Contract for website development and design services for Acme Corporation.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>75%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: Jun 15, 2023</span>
+                    <span><i class="fas fa-user"></i> Sarah J.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign">
+                        <i class="fas fa-signature"></i> Sign
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contract-card" data-contract-id="2">
+                <div class="contract-header">
+                    <div class="contract-name">Mobile App Development</div>
+                    <div class="contract-status status-pending">Pending</div>
+                </div>
+                <div class="contract-details">Contract for cross-platform mobile application development for Globex Inc.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>30%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: Aug 1, 2023</span>
+                    <span><i class="fas fa-user"></i> Michael T.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign">
+                        <i class="fas fa-signature"></i> Sign
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contract-card" data-contract-id="3">
+                <div class="contract-header">
+                    <div class="contract-name">Brand Identity</div>
+                    <div class="contract-status status-completed">Completed</div>
+                </div>
+                <div class="contract-details">Contract for brand identity design including logo and style guide.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: May 10, 2023</span>
+                    <span><i class="fas fa-user"></i> Emily R.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign" style="opacity: 0.5; cursor: default;">
+                        <i class="fas fa-signature"></i> Signed
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contract-card" data-contract-id="4">
+                <div class="contract-header">
+                    <div class="contract-name">E-commerce Platform</div>
+                    <div class="contract-status status-expired">Expired</div>
+                </div>
+                <div class="contract-details">Contract for e-commerce platform development with payment integration.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>60%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: Apr 5, 2023</span>
+                    <span><i class="fas fa-user"></i> Sarah J.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign" style="opacity: 0.5; cursor: default;">
+                        <i class="fas fa-signature"></i> Expired
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contract-card" data-contract-id="5">
+                <div class="contract-header">
+                    <div class="contract-name">Content Marketing</div>
+                    <div class="contract-status status-completed">Completed</div>
+                </div>
+                <div class="contract-details">Contract for content marketing strategy and execution.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: Mar 15, 2023</span>
+                    <span><i class="fas fa-user"></i> Emily R.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign" style="opacity: 0.5; cursor: default;">
+                        <i class="fas fa-signature"></i> Signed
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contract-card" data-contract-id="6">
+                <div class="contract-header">
+                    <div class="contract-name">CRM Implementation</div>
+                    <div class="contract-status status-active">Active</div>
+                </div>
+                <div class="contract-details">Contract for customer relationship management system implementation.</div>
+                
+                <div class="contract-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>40%</span>
+                    </div>
+                </div>
+                
+                <div class="contract-meta">
+                    <span><i class="far fa-calendar"></i> Start: Jul 20, 2023</span>
+                    <span><i class="fas fa-user"></i> Michael T.</span>
+                </div>
+                
+                <div class="contract-actions">
+                    <div class="contract-btn btn-view">
+                        <i class="fas fa-eye"></i> View
+                    </div>
+                    <div class="contract-btn btn-sign">
+                        <i class="fas fa-signature"></i> Sign
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 ShareFlow Pro. All rights reserved.</p>
+            <p>Need help? Contact support@shareflowpro.com or call (555) 123-4567</p>
+        </div>
+    </div>
+
+    <!-- Contract Detail Modal -->
+    <div class="modal" id="contractDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Contract Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="contract-detail-header">
+                    <div class="contract-info">
+                        <h2 class="contract-title">Website Development</h2>
+                        <div class="contract-status status-active" style="display: inline-block;">Active</div>
+                        <p class="contract-description">Contract for website development and design services for Acme Corporation. This includes frontend and backend development, content management system, and three rounds of revisions.</p>
+                        
+                        <div class="contract-meta-detail">
+                            <div class="meta-item">
+                                <span class="meta-label">Start Date</span>
+                                <span class="meta-value">Jun 15, 2023</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">End Date</span>
+                                <span class="meta-value">Sep 15, 2023</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Client</span>
+                                <span class="meta-value">Acme Corporation</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Value</span>
+                                <span class="meta-value">$12,500.00</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Project Manager</span>
+                                <span class="meta-value">Sarah Johnson</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contract-actions-detail">
+                        <button class="action-btn btn-outline">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button class="action-btn btn-primary">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="details">Details</div>
+                    <div class="tab" data-tab="signature">Signature</div>
+                    <div class="tab" data-tab="files">Files</div>
+                    <div class="tab" data-tab="history">History</div>
+                </div>
+                
+                <div class="tab-content active" id="details-tab">
+                    <h3>Contract Terms</h3>
+                    <p>The Contractor will provide website development services including but not limited to:</p>
+                    <ul style="margin-left: 20px; margin-bottom: 20px;">
+                        <li>Responsive website design</li>
+                        <li>Frontend development with HTML, CSS, and JavaScript</li>
+                        <li>Backend development with Node.js</li>
+                        <li>Content management system implementation</li>
+                        <li>Search engine optimization</li>
+                        <li>Three rounds of revisions</li>
+                    </ul>
+                    
+                    <h3>Payment Schedule</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>30% upon signing</li>
+                        <li>40% upon completion of design phase</li>
+                        <li>30% upon project completion</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="signature-tab">
+                    <h3>Digital Signature</h3>
+                    <p>Please sign the contract using the signature pad below.</p>
+                    
+                    <div class="signature-container">
+                        <div class="signature-pad" id="signaturePad"></div>
+                        <div class="signature-actions">
+                            <button class="signature-btn btn-clear" id="clearSignature">
+                                <i class="fas fa-eraser"></i> Clear
+                            </button>
+                            <button class="signature-btn btn-save" id="saveSignature">
+                                <i class="fas fa-check"></i> Save Signature
+                            </button>
+                        </div>
+                        <p>By signing, you agree to the terms and conditions of this contract.</p>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="files-tab">
+                    <h3>Contract Files</h3>
+                    <p>Upload or manage files associated with this contract.</p>
+                    
+                    <div class="upload-container" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            Drag & drop files here or click to browse
+                        </div>
+                        <button class="upload-btn">Browse Files</button>
+                        <input type="file" id="fileInput" style="display: none;">
+                    </div>
+                    
+                    <div class="file-list">
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Contract_Agreement.pdf</div>
+                                <div class="file-meta">2.4 MB · Uploaded Jul 12, 2023</div>
+                            </div>
+                            <div class="file-download">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-word"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Scope_of_Work.docx</div>
+                                <div class="file-meta">1.8 MB · Uploaded Jul 10, 2023</div>
+                            </div>
+                            <div class="file-download">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="history-tab">
+                    <h3>Contract History</h3>
+                    <p>View the history of changes and actions for this contract.</p>
+                    
+                    <div class="file-list">
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Contract created</div>
+                                <div class="file-meta">By John Doe · Jun 15, 2023 10:24 AM</div>
+                            </div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Contract updated</div>
+                                <div class="file-meta">By Sarah Johnson · Jun 18, 2023 2:15 PM</div>
+                            </div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Scope of Work added</div>
+                                <div class="file-meta">By John Doe · Jun 20, 2023 9:45 AM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Open contract detail modal when clicking on contract cards
+        document.querySelectorAll('.contract-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.getElementById('contractDetailModal').style.display = 'flex';
+            });
+        });
+
+        // Close modals
+        document.querySelectorAll('.modal-close').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the corresponding tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Filter buttons functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all filter buttons in the same group
+                this.parentElement.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+            });
+        });
+
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const pageName = this.querySelector('.nav-text').textContent;
+                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Signature functionality
+        const signaturePad = document.getElementById('signaturePad');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let ctx = null;
+
+        // Initialize canvas context
+        if (signaturePad) {
+            // Set up canvas
+            signaturePad.width = signaturePad.offsetWidth;
+            signaturePad.height = signaturePad.offsetHeight;
+            
+            ctx = signaturePad.getContext('2d');
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+            
+            // Add event listeners for drawing
+            signaturePad.addEventListener('mousedown', startDrawing);
+            signaturePad.addEventListener('mousemove', draw);
+            signaturePad.addEventListener('mouseup', stopDrawing);
+            signaturePad.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events for mobile devices
+            signaturePad.addEventListener('touchstart', handleTouchStart);
+            signaturePad.addEventListener('touchmove', handleTouchMove);
+            signaturePad.addEventListener('touchend', handleTouchEnd);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            signaturePad.dispatchEvent(mouseEvent);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            signaturePad.dispatchEvent(mouseEvent);
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            signaturePad.dispatchEvent(mouseEvent);
+        }
+
+        // Clear signature
+        document.getElementById('clearSignature').addEventListener('click', function() {
+            ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+        });
+
+        // Save signature
+        document.getElementById('saveSignature').addEventListener('click', function() {
+            alert('Signature saved successfully! In a real application, this would save the signature to the contract.');
+        });
+
+        // File upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        if (uploadArea && fileInput) {
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    alert(`File "${this.files[0].name}" selected. In a real application, this would upload the file.`);
+                }
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#6366f1';
+                this.style.backgroundColor = '#f9fafb';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = '#e5e7eb';
+                this.style.backgroundColor = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e5e7eb';
+                this.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    alert(`File "${e.dataTransfer.files[0].name}" dropped. In a real application, this would upload the file.`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
