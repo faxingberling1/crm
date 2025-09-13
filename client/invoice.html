@@ -111,6 +111,7 @@
         .page-title {
             font-size: 24px;
             font-weight: 700;
+            color: var(--dark);
         }
 
         .search-box {
@@ -427,6 +428,7 @@
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 8px;
+            color: var(--dark);
         }
 
         .summary-change {
@@ -493,6 +495,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 600;
+            color: var(--dark);
         }
 
         .modal-close {
@@ -515,6 +518,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
+            color: var(--dark);
         }
 
         .form-input {
@@ -674,12 +678,12 @@
             <div class="logo-text">ShareFlow Pro</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/dashboard.html'">
             <div class="nav-icon"><i class="fas fa-home"></i></div>
             <div class="nav-text">Dashboard</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/project.html'">
             <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
             <div class="nav-text">Projects</div>
         </div>
@@ -689,32 +693,32 @@
             <div class="nav-text">Invoices</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/messaging.html'">
             <div class="nav-icon"><i class="fas fa-comments"></i></div>
             <div class="nav-text">Messages</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/contract.html'">
             <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
             <div class="nav-text">Contracts</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/filesharing.html'">
             <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
             <div class="nav-text">File Sharing</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/calendar.html'">
             <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
             <div class="nav-text">Calendar</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/settings.html'">
             <div class="nav-icon"><i class="fas fa-cog"></i></div>
             <div class="nav-text">Settings</div>
         </div>
         
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='https://faxingberling1.github.io/crm/client/help.html'">
             <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
             <div class="nav-text">Help & Support</div>
         </div>
@@ -1084,21 +1088,6 @@ contact@shareflowpro.com
                 
                 // Add active class to clicked button
                 this.classList.add('active');
-            });
-        });
-
-        // Navigation items
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                if (!this.classList.contains('active')) {
-                    const pageName = this.querySelector('.nav-text').textContent;
-                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
-                    
-                    document.querySelectorAll('.nav-item').forEach(i => {
-                        i.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                }
             });
         });
 
