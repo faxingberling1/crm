@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ShareFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 18px;
+            color: var(--gray);
+            margin-right: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Settings Layout */
+        .settings-container {
+            display: flex;
+            gap: 24px;
+        }
+
+        .settings-sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+            position: sticky;
+            top: 24px;
+        }
+
+        .settings-option {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .settings-option:hover {
+            background: #f3f4f6;
+        }
+
+        .settings-option.active {
+            background: #e0e7ff;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .settings-option i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .settings-content {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .settings-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-item input {
+            margin-right: 8px;
+        }
+
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+            margin-right: 16px;
+        }
+
+        .profile-info h2 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            color: var(--gray);
+        }
+
+        .avatar-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Security Section */
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .security-info {
+            flex: 1;
+        }
+
+        .security-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .security-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Payment Cards */
+        .payment-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-type {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: #cbd5e1;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-chip i {
+            color: #64748b;
+            font-size: 20px;
+        }
+
+        .card-number {
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-holder, .card-expiry {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .card-value {
+            font-weight: 500;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .default-badge {
+            position: absolute;
+            top: -10px;
+            right: 16px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Card Form */
+        .card-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+        }
+
+        .form-full-width {
+            grid-column: span 2;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .settings-container {
+                flex-direction: column;
+            }
+            
+            .settings-sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 16px 0;
+            }
+            
+            .user-menu {
+                align-self: flex-end;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 16px;
+            }
+            
+            .security-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .security-item .btn {
+                margin-top: 12px;
+                align-self: flex-end;
+            }
+            
+            .payment-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-full-width {
+                grid-column: span 1;
+            }
+        }
+
+        /* Toggle for mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .toggle-info {
+            flex: 1;
+        }
+
+        .toggle-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .toggle-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="logo-text">ShareFlow Pro</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="nav-text">Projects</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="nav-text">Invoices</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-comments"></i></div>
+            <div class="nav-text">Messages</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
+            <div class="nav-text">Contracts</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="nav-text">File Sharing</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="nav-text">Calendar</div>
+        </div>
+        
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <div class="nav-text">Settings</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
+            <div class="nav-text">Help & Support</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">Settings</h1>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search settings...">
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-badge">3</div>
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <!-- Settings Container -->
+        <div class="settings-container">
+            <!-- Settings Sidebar -->
+            <div class="settings-sidebar">
+                <div class="settings-option" data-target="profile">
+                    <i class="fas fa-user"></i> Profile
+                </div>
+                <div class="settings-option" data-target="account">
+                    <i class="fas fa-cog"></i> Account
+                </div>
+                <div class="settings-option" data-target="security">
+                    <i class="fas fa-shield-alt"></i> Security
+                </div>
+                <div class="settings-option active" data-target="payments">
+                    <i class="fas fa-credit-card"></i> Payment Methods
+                </div>
+                <div class="settings-option" data-target="notifications">
+                    <i class="fas fa-bell"></i> Notifications
+                </div>
+                <div class="settings-option" data-target="preferences">
+                    <i class="fas fa-paint-brush"></i> Preferences
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+                <!-- Payments Section -->
+                <div class="settings-section" id="payments-section">
+                    <h2 class="section-title">Payment Methods</h2>
+                    
+                    <div class="payment-cards" id="paymentCards">
+                        <!-- Cards will be loaded here -->
+                    </div>
+                    
+                    <button class="btn btn-primary" id="addCardBtn">
+                        <i class="fas fa-plus"></i> Add Payment Method
+                    </button>
+                </div>
+
+                <!-- Profile Section (Hidden by default) -->
+                <div class="settings-section" id="profile-section" style="display: none;">
+                    <h2 class="section-title">Profile Settings</h2>
+                    
+                    <div class="profile-header">
+                        <div class="profile-avatar">JD</div>
+                        <div class="profile-info">
+                            <h2>John Doe</h2>
+                            <p>Administrator</p>
+                            <div class="avatar-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-camera"></i> Change Avatar
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" value="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" value="john.doe@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Position</label>
+                        <input type="text" class="form-input" value="Project Manager">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea class="form-textarea">Project manager with 8+ years of experience in software development projects. Specialized in agile methodologies and team coordination.</textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary">Save Changes</button>
+                </div>
+
+                <!-- Account Section (Hidden by default) -->
+                <div class="settings-section" id="account-section" style="display: none;">
+                    <h2 class="section-title">Account Settings</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Language</label>
+                        <select class="form-select">
+                            <option>English</option>
+                            <option>Spanish</option>
+                            <option>French</option>
+                            <option>German</option>
+                            <option>Japanese</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Time Zone</label>
+                        <select class="form-select">
+                            <option>(GMT-08:00) Pacific Time</option>
+                            <option>(GMT-07:00) Mountain Time</option>
+                            <option>(GMT-06:00) Central Time</option>
+                            <option selected>(GMT-05:00) Eastern Time</option>
+                            <option>(GMT) Greenwich Mean Time</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Date Format</label>
+                        <select class="form-select">
+                            <option>MM/DD/YYYY</option>
+                            <option>DD/MM/YYYY</option>
+                            <option>YYYY-MM-DD</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary">Save Preferences</button>
+                </div>
+
+                <!-- Security Section (Hidden by default) -->
+                <div class="settings-section" id="security-section" style="display: none;">
+                    <h2 class="section-title">Security Settings</h2>
+                    
+                    <div class="security-item">
+                        <div class="security-info">
+                            <div class="security-title">Password</div>
+                            <div class="security-desc">Last changed 3 months ago</div>
+                        </div>
+                        <button class="btn btn-outline" id="changePasswordBtn">Change Password</button>
+                    </div>
+                    
+                    <div class="security-item">
+                        <div class="security-info">
+                            <div class="security-title">Two-Factor Authentication</div>
+                            <div class="security-desc">Add an extra layer of security to your account</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Notifications Section (Hidden by default) -->
+                <div class="settings-section" id="notifications-section" style="display: none;">
+                    <h2 class="section-title">Notification Preferences</h2>
+                    
+                    <div class="notification-category">
+                        <div class="category-title">Email Notifications</div>
+                        
+                        <div class="toggle-container">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Project Updates</div>
+                                <div class="toggle-desc">Get notified about project changes and updates</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <div class="toggle-info">
+                                <div class="toggle-title">Contract Updates</div>
+                                <div class="toggle-desc">Notifications about contract changes and signatures</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary">Save Preferences</button>
+                </div>
+
+                <!-- Preferences Section (Hidden by default) -->
+                <div class="settings-section" id="preferences-section" style="display: none;">
+                    <h2 class="section-title">Appearance & Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Theme</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="lightTheme" name="theme" checked>
+                                <label for="lightTheme">Light</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="darkTheme" name="theme">
+                                <label for="darkTheme">Dark</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Default View</label>
+                        <select class="form-select">
+                            <option>Dashboard</option>
+                            <option>Projects</option>
+                            <option>Calendar</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 ShareFlow Pro. All rights reserved.</p>
+            <p>Need help? Contact support@shareflowpro.com or call (555) 123-4567</p>
+        </div>
+    </div>
+
+    <!-- Add Card Modal -->
+    <div class="modal" id="addCardModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Payment Method</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Card Number</label>
+                    <input type="text" class="form-input" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                
+                <div class="card-form">
+                    <div class="form-group">
+                        <label class="form-label">Cardholder Name</label>
+                        <input type="text" class="form-input" id="cardName" placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Expiration Date</label>
+                        <input type="text" class="form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">CVV</label>
+                        <input type="text" class="form-input" id="cardCvv" placeholder="123" maxlength="3">
+                    </div>
+                    
+                    <div class="form-group form-full-width">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="setDefaultCard">
+                            <label for="setDefaultCard">Set as default payment method</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary" id="saveCardBtn">Save Card</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Change Password</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-input" placeholder="Enter current password">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" placeholder="Enter new password">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-input" placeholder="Confirm new password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Settings navigation
+        document.querySelectorAll('.settings-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                document.querySelectorAll('.settings-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.settings-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show the selected section
+                const target = this.getAttribute('data-target');
+                document.getElementById(`${target}-section`).style.display = 'block';
+            });
+        });
+        
+        // Change password modal
+        document.getElementById('changePasswordBtn').addEventListener('click', function() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        });
+        
+        // Add card modal
+        document.getElementById('addCardBtn').addEventListener('click', function() {
+            document.getElementById('addCardModal').style.display = 'flex';
+        });
+        
+        // Close modals
+        document.querySelectorAll('.modal-close, .modal .btn:not(.btn-primary)').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+        
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+        
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const pageName = this.querySelector('.nav-text').textContent;
+                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Card number formatting
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                value = value.match(/.{1,4}/g).join(' ');
+            }
+            e.target.value = value;
+        });
+        
+        // Expiry date formatting
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+        
+        // CVV formatting - numbers only
+        document.getElementById('cardCvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+        
+        // Card storage and management
+        let paymentCards = JSON.parse(localStorage.getItem('paymentCards')) || [];
+        let defaultCardId = localStorage.getItem('defaultCardId') || null;
+        
+        // Sample cards if none exist
+        if (paymentCards.length === 0) {
+            paymentCards = [
+                {
+                    id: '1',
+                    type: 'Visa',
+                    number: '**** 4567',
+                    fullNumber: '4111111111111111',
+                    name: 'John Doe',
+                    expiry: '12/24',
+                    cvv: '123',
+                    isDefault: true
+                }
+            ];
+            defaultCardId = '1';
+            localStorage.setItem('paymentCards', JSON.stringify(paymentCards));
+            localStorage.setItem('defaultCardId', defaultCardId);
+        }
+        
+        // Render payment cards
+        function renderPaymentCards() {
+            const container = document.getElementById('paymentCards');
+            container.innerHTML = '';
+            
+            paymentCards.forEach(card => {
+                const isDefault = card.id === defaultCardId;
+                
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-item';
+                cardElement.innerHTML = `
+                    ${isDefault ? '<div class="default-badge">Default</div>' : ''}
+                    <div class="card-header">
+                        <div class="card-type">${card.type}</div>
+                        <div class="card-chip">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                    </div>
+                    <div class="card-number">${card.number}</div>
+                    <div class="card-details">
+                        <div class="card-holder">
+                            <div class="card-label">Card Holder</div>
+                            <div class="card-value">${card.name}</div>
+                        </div>
+                        <div class="card-expiry">
+                            <div class="card-label">Expires</div>
+                            <div class="card-value">${card.expiry}</div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        ${!isDefault ? `
+                            <button class="btn btn-outline set-default-btn" data-id="${card.id}">
+                                <i class="fas fa-star"></i> Set Default
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-danger remove-card-btn" data-id="${card.id}">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(cardElement);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.set-default-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cardId = this.getAttribute('data-id');
+                    setDefaultCard(cardId);
+                });
+            });
+            
+            document.querySelectorAll('.remove-card-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cardId = this.getAttribute('data-id');
+                    removeCard(cardId);
+                });
+            });
+        }
+        
+        // Set default card
+        function setDefaultCard(cardId) {
+            defaultCardId = cardId;
+            localStorage.setItem('defaultCardId', defaultCardId);
+            renderPaymentCards();
+        }
+        
+        // Remove card
+        function removeCard(cardId) {
+            if (confirm('Are you sure you want to remove this card?')) {
+                paymentCards = paymentCards.filter(card => card.id !== cardId);
+                
+                // If we removed the default card, set a new default if available
+                if (cardId === defaultCardId) {
+                    defaultCardId = paymentCards.length > 0 ? paymentCards[0].id : null;
+                    localStorage.setItem('defaultCardId', defaultCardId);
+                }
+                
+                localStorage.setItem('paymentCards', JSON.stringify(paymentCards));
+                renderPaymentCards();
+            }
+        }
+        
+        // Add new card
+        document.getElementById('saveCardBtn').addEventListener('click', function() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardName = document.getElementById('cardName').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvv = document.getElementById('cardCvv').value;
+            const setAsDefault = document.getElementById('setDefaultCard').checked;
+            
+            // Basic validation
+            if (!cardNumber || !cardName || !cardExpiry || !cardCvv) {
+                alert('Please fill in all card details');
+                return;
+            }
+            
+            // Determine card type based on first digit
+            let cardType = 'Unknown';
+            const firstDigit = cardNumber.replace(/\s/g, '').charAt(0);
+            if (firstDigit === '4') cardType = 'Visa';
+            else if (firstDigit === '5') cardType = 'Mastercard';
+            else if (firstDigit === '3') cardType = 'American Express';
+            else if (firstDigit === '6') cardType = 'Discover';
+            
+            // Create new card object
+            const newCard = {
+                id: Date.now().toString(),
+                type: cardType,
+                number: '**** ' + cardNumber.slice(-4),
+                fullNumber: cardNumber.replace(/\s/g, ''),
+                name: cardName,
+                expiry: cardExpiry,
+                cvv: cardCvv,
+                isDefault: setAsDefault
+            };
+            
+            // Add to cards array
+            paymentCards.push(newCard);
+            
+            // Set as default if requested
+            if (setAsDefault) {
+                defaultCardId = newCard.id;
+                localStorage.setItem('defaultCardId', defaultCardId);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('paymentCards', JSON.stringify(paymentCards));
+            
+            // Re-render cards and close modal
+            renderPaymentCards();
+            document.getElementById('addCardModal').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardName').value = '';
+            document.getElementById('cardExpiry').value = '';
+            document.getElementById('cardCvv').value = '';
+            document.getElementById('setDefaultCard').checked = false;
+        });
+        
+        // Initial render
+        renderPaymentCards();
+    </script>
+</body>
+</html>
