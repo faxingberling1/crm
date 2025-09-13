@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - ShareFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 18px;
+            color: var(--gray);
+            margin-right: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Calendar Controls */
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .current-date {
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: #f3f4f6;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Calendar Grid */
+        .calendar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding: 0 8px;
+        }
+
+        .weekday {
+            padding: 12px;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .day {
+            height: 100px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .day:hover {
+            background: #f9fafb;
+        }
+
+        .day.other-month {
+            color: #9ca3af;
+            background: #f9fafb;
+        }
+
+        .day-number {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .day.today .day-number {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .event {
+            background: #e0e7ff;
+            border-left: 3px solid var(--primary);
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 12px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event.meeting {
+            background: #dcfce7;
+            border-left-color: var(--success);
+        }
+
+        .event.urgent {
+            background: #fee2e2;
+            border-left-color: var(--danger);
+        }
+
+        /* Upcoming Events */
+        .events-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            border-radius: 8px;
+            background: #f9fafb;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .event-item:hover {
+            background: #f3f4f6;
+        }
+
+        .event-time {
+            min-width: 80px;
+            font-weight: 500;
+            margin-right: 16px;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .event-description {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .event-platform {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .event-platform i {
+            margin-right: 4px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .event-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .event-action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        /* Integration Panel */
+        .integrations {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .integration-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .integration-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .integration-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .google-icon {
+            background: #f1f3f4;
+            color: #4285f4;
+        }
+
+        .microsoft-icon {
+            background: #f3f2f1;
+            color: #0078d4;
+        }
+
+        .zoom-icon {
+            background: #e5f0ff;
+            color: #2d8cff;
+        }
+
+        .integration-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .integration-status {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .integration-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .connect-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .connect-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .connected-btn {
+            background: #dcfce7;
+            color: #16a34a;
+            cursor: default;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .platform-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .platform-option {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .platform-option.selected {
+            border-color: var(--primary);
+            background: #e0e7ff;
+        }
+
+        .platform-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 16px 0;
+            }
+            
+            .user-menu {
+                align-self: flex-end;
+            }
+            
+            .calendar-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .calendar-nav {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 16px;
+            }
+            
+            .view-options {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .weekday {
+                padding: 8px 4px;
+                font-size: 14px;
+            }
+            
+            .day {
+                height: 80px;
+                font-size: 14px;
+            }
+            
+            .integration-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .time-inputs, .platform-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toggle for mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="logo-text">ShareFlow Pro</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="nav-text">Projects</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="nav-text">Invoices</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-comments"></i></div>
+            <div class="nav-text">Messages</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
+            <div class="nav-text">Contracts</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="nav-text">File Sharing</div>
+        </div>
+        
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="nav-text">Calendar</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <div class="nav-text">Settings</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
+            <div class="nav-text">Help & Support</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">Calendar</h1>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search events...">
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-badge">3</div>
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <!-- Calendar Controls -->
+        <div class="calendar-controls">
+            <div class="calendar-nav">
+                <div class="nav-btn" id="prevMonth">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="current-date" id="currentMonth">September 2023</div>
+                <div class="nav-btn" id="nextMonth">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            
+            <div class="view-options">
+                <div class="view-btn active">Month</div>
+                <div class="view-btn">Week</div>
+                <div class="view-btn">Day</div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="newEventBtn">
+                    <i class="fas fa-plus"></i> New Event
+                </button>
+                <button class="btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar">
+            <div class="weekdays">
+                <div class="weekday">Sun</div>
+                <div class="weekday">Mon</div>
+                <div class="weekday">Tue</div>
+                <div class="weekday">Wed</div>
+                <div class="weekday">Thu</div>
+                <div class="weekday">Fri</div>
+                <div class="weekday">Sat</div>
+            </div>
+            
+            <div class="days" id="calendarDays">
+                <!-- Calendar days will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Integrations Panel -->
+        <div class="integrations">
+            <div class="section-header">
+                <div class="section-title">Calendar Integrations</div>
+            </div>
+            
+            <div class="integration-cards">
+                <div class="integration-card">
+                    <div class="integration-icon google-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="integration-name">Google Calendar</div>
+                    <div class="integration-status">Connected</div>
+                    <button class="integration-btn connected-btn">
+                        <i class="fas fa-check"></i> Connected
+                    </button>
+                </div>
+                
+                <div class="integration-card">
+                    <div class="integration-icon microsoft-icon">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                    <div class="integration-name">Microsoft Outlook</div>
+                    <div class="integration-status">Not connected</div>
+                    <button class="integration-btn connect-btn" id="connectMsBtn">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                </div>
+                
+                <div class="integration-card">
+                    <div class="integration-icon zoom-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="integration-name">Zoom Meetings</div>
+                    <div class="integration-status">Connected</div>
+                    <button class="integration-btn connected-btn">
+                        <i class="fas fa-check"></i> Connected
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="events-section">
+            <div class="section-header">
+                <div class="section-title">Upcoming Events</div>
+                <div class="view-all">View All</div>
+            </div>
+            
+            <div class="events-list">
+                <div class="event-item">
+                    <div class="event-time">
+                        <div>10:00 AM</div>
+                        <div style="font-size: 12px; color: var(--gray);">Sep 15</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">Client Project Review</div>
+                        <div class="event-description">Quarterly review meeting with Acme Corp team</div>
+                        <div class="event-platform">
+                            <i class="fas fa-video" style="color: #2d8cff;"></i> Zoom Meeting
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <div class="event-action-btn">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="event-action-btn">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-time">
+                        <div>2:30 PM</div>
+                        <div style="font-size: 12px; color: var(--gray);">Sep 16</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">Team Standup</div>
+                        <div class="event-description">Daily standup with development team</div>
+                        <div class="event-platform">
+                            <i class="fab fa-google" style="color: #4285f4;"></i> Google Meet
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <div class="event-action-btn">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="event-action-btn">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="event-time">
+                        <div>11:00 AM</div>
+                        <div style="font-size: 12px; color: var(--gray);">Sep 18</div>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">Contract Signing</div>
+                        <div class="event-description">Signing contract with new client Globex Inc</div>
+                        <div class="event-platform">
+                            <i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Conference Room A
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <div class="event-action-btn">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="event-action-btn">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 ShareFlow Pro. All rights reserved.</p>
+            <p>Need help? Contact support@shareflowpro.com or call (555) 123-4567</p>
+        </div>
+    </div>
+
+    <!-- New Event Modal -->
+    <div class="modal" id="newEventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Schedule New Event</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Event Title</label>
+                    <input type="text" class="form-input" placeholder="Enter event title">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="Enter event description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date & Time</label>
+                    <div class="time-inputs">
+                        <div>
+                            <label class="form-label">Start</label>
+                            <input type="datetime-local" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label">End</label>
+                            <input type="datetime-local" class="form-input">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Meeting Platform</label>
+                    <div class="platform-options">
+                        <div class="platform-option selected" data-platform="none">
+                            <div class="platform-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div>No Meeting</div>
+                        </div>
+                        <div class="platform-option" data-platform="zoom">
+                            <div class="platform-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div>Zoom</div>
+                        </div>
+                        <div class="platform-option" data-platform="google">
+                            <div class="platform-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div>Google Meet</div>
+                        </div>
+                        <div class="platform-option" data-platform="in-person">
+                            <div class="platform-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>In Person</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="meetingDetails" style="display: none;">
+                    <label class="form-label">Meeting Details</label>
+                    <textarea class="form-textarea" placeholder="Meeting link or location details"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Attendees</label>
+                    <input type="text" class="form-input" placeholder="Add attendees by email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Calendar</label>
+                    <select class="form-select">
+                        <option>ShareFlow Pro Calendar</option>
+                        <option>Google Calendar</option>
+                        <option>Outlook Calendar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Schedule Event</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connect Microsoft Modal -->
+    <div class="modal" id="connectMsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Connect Microsoft Account</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div class="integration-icon microsoft-icon" style="margin: 0 auto 16px; width: 64px; height: 64px; font-size: 32px;">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                    <h3 style="margin-bottom: 8px;">Connect your Microsoft Account</h3>
+                    <p style="color: var(--gray);">Connect your Microsoft Outlook calendar to sync events and schedule meetings</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Microsoft Email</label>
+                    <input type="email" class="form-input" placeholder="Enter your Microsoft email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Enter your password">
+                </div>
+                
+                <div class="checkbox-item">
+                    <input type="checkbox" id="syncCalendar">
+                    <label for="syncCalendar">Sync my existing calendar events</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Connect Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current date tracking
+        let currentDate = new Date();
+        
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Initialize calendar
+        function renderCalendar() {
+            const calendarDays = document.getElementById('calendarDays');
+            const currentMonthElement = document.getElementById('currentMonth');
+            
+            // Clear previous calendar
+            calendarDays.innerHTML = '';
+            
+            // Set current month text
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            currentMonthElement.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Get first day of month and total days
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startDay = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+            
+            // Previous month days
+            const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+            for (let i = startDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.innerHTML = `<div class="day-number">${prevMonthLastDay - i}</div>`;
+                calendarDays.appendChild(day);
+            }
+            
+            // Current month days
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'day';
+                
+                // Check if this is today
+                if (i === today.getDate() && currentDate.getMonth() === today.getMonth() && currentDate.getFullYear() === today.getFullYear()) {
+                    day.classList.add('today');
+                }
+                
+                day.innerHTML = `<div class="day-number">${i}</div>`;
+                
+                // Add sample events
+                if (i === 15) {
+                    day.innerHTML += `<div class="event meeting">Client Review</div>`;
+                    day.innerHTML += `<div class="event">Team Lunch</div>`;
+                }
+                
+                if (i === 18) {
+                    day.innerHTML += `<div class="event">Contract Signing</div>`;
+                }
+                
+                if (i === 22) {
+                    day.innerHTML += `<div class="event urgent">Deadline</div>`;
+                }
+                
+                if (i % 7 === 0) {
+                    day.innerHTML += `<div class="event">Weekly Meeting</div>`;
+                }
+                
+                calendarDays.appendChild(day);
+            }
+            
+            // Next month days
+            const daysNeeded = 42 - (startDay + daysInMonth); // 6 rows of 7 days
+            for (let i = 1; i <= daysNeeded; i++) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.innerHTML = `<div class="day-number">${i}</div>`;
+                calendarDays.appendChild(day);
+            }
+        }
+        
+        // Navigation
+        document.getElementById('prevMonth').addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+        
+        document.getElementById('nextMonth').addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+        
+        // View options
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const viewType = this.textContent.trim();
+                alert(`Switched to ${viewType} view. In a real application, this would change the calendar view.`);
+            });
+        });
+        
+        // New event modal
+        document.getElementById('newEventBtn').addEventListener('click', function() {
+            document.getElementById('newEventModal').style.display = 'flex';
+        });
+        
+        // Platform selection
+        document.querySelectorAll('.platform-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.platform-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const meetingDetails = document.getElementById('meetingDetails');
+                if (this.getAttribute('data-platform') === 'none') {
+                    meetingDetails.style.display = 'none';
+                } else {
+                    meetingDetails.style.display = 'block';
+                }
+            });
+        });
+        
+        // Connect Microsoft account
+        document.getElementById('connectMsBtn').addEventListener('click', function() {
+            document.getElementById('connectMsModal').style.display = 'flex';
+        });
+        
+        // Close modals
+        document.querySelectorAll('.modal-close, .modal .btn:not(.btn-primary)').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+        
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+        
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const pageName = this.querySelector('.nav-text').textContent;
+                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Initialize calendar on load
+        renderCalendar();
+    </script>
+</body>
+</html>
