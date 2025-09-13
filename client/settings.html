@@ -839,7 +839,7 @@
         <div class="settings-container">
             <!-- Settings Sidebar -->
             <div class="settings-sidebar">
-                <div class="settings-option" data-target="profile">
+                <div class="settings-option active" data-target="profile">
                     <i class="fas fa-user"></i> Profile
                 </div>
                 <div class="settings-option" data-target="account">
@@ -848,7 +848,7 @@
                 <div class="settings-option" data-target="security">
                     <i class="fas fa-shield-alt"></i> Security
                 </div>
-                <div class="settings-option active" data-target="payments">
+                <div class="settings-option" data-target="payments">
                     <i class="fas fa-credit-card"></i> Payment Methods
                 </div>
                 <div class="settings-option" data-target="notifications">
@@ -861,21 +861,8 @@
 
             <!-- Settings Content -->
             <div class="settings-content">
-                <!-- Payments Section -->
-                <div class="settings-section" id="payments-section">
-                    <h2 class="section-title">Payment Methods</h2>
-                    
-                    <div class="payment-cards" id="paymentCards">
-                        <!-- Cards will be loaded here -->
-                    </div>
-                    
-                    <button class="btn btn-primary" id="addCardBtn">
-                        <i class="fas fa-plus"></i> Add Payment Method
-                    </button>
-                </div>
-
-                <!-- Profile Section (Hidden by default) -->
-                <div class="settings-section" id="profile-section" style="display: none;">
+                <!-- Profile Section -->
+                <div class="settings-section" id="profile-section">
                     <h2 class="section-title">Profile Settings</h2>
                     
                     <div class="profile-header">
@@ -977,6 +964,19 @@
                             <span class="slider"></span>
                         </label>
                     </div>
+                </div>
+
+                <!-- Payments Section (Hidden by default) -->
+                <div class="settings-section" id="payments-section" style="display: none;">
+                    <h2 class="section-title">Payment Methods</h2>
+                    
+                    <div class="payment-cards" id="paymentCards">
+                        <!-- Cards will be loaded here -->
+                    </div>
+                    
+                    <button class="btn btn-primary" id="addCardBtn">
+                        <i class="fas fa-plus"></i> Add Payment Method
+                    </button>
                 </div>
 
                 <!-- Notifications Section (Hidden by default) -->
@@ -1250,7 +1250,7 @@
                         </div>
                         <div class="card-expiry">
                             <div class="card-label">Expires</div>
-                            <div class="card-value">${card.expiry</div>
+                            <div class="card-value">${card.expiry}</div>
                         </div>
                     </div>
                     <div class="card-actions">
