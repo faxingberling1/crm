@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing - ShareFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 18px;
+            color: var(--gray);
+            margin-right: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Filter and Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: #f9fafb;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-btn i {
+            margin-right: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* File Browser */
+        .file-browser {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .browser-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .browser-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #f3f4f6;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-separator {
+            margin: 0 8px;
+        }
+
+        /* File Grid View */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .file-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-icon {
+            color: #e53e3e;
+        }
+
+        .doc-icon {
+            color: #3182ce;
+        }
+
+        .img-icon {
+            color: #38a169;
+        }
+
+        .zip-icon {
+            color: #d69e2e;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* File List View */
+        .files-list {
+            display: none;
+            flex-direction: column;
+            margin-bottom: 24px;
+        }
+
+        .list-header {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .file-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-row:hover {
+            background: #f9fafb;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .file-type-icon {
+            margin-right: 12px;
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .file-details {
+            overflow: hidden;
+        }
+
+        .file-title {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-desc {
+            font-size: 12px;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-size, .file-modified, .file-shared {
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #f9fafb;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Recent Activity */
+        .activity-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--dark);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 16px 0;
+            }
+            
+            .user-menu {
+                align-self: flex-end;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            
+            .files-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .list-header, .file-row {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+            
+            .file-shared {
+                display: none;
+            }
+        }
+
+        /* Toggle for mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="logo-text">ShareFlow Pro</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="nav-text">Projects</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="nav-text">Invoices</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-comments"></i></div>
+            <div class="nav-text">Messages</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
+            <div class="nav-text">Contracts</div>
+        </div>
+        
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="nav-text">File Sharing</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="nav-text">Calendar</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <div class="nav-text">Settings</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
+            <div class="nav-text">Help & Support</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">File Sharing</h1>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search files...">
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-badge">3</div>
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="filter-group">
+                <div class="filter-btn active">
+                    <i class="fas fa-layer-group"></i> All Files
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-file-pdf"></i> Documents
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-file-image"></i> Images
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-file-video"></i> Media
+                </div>
+                <div class="filter-btn">
+                    <i class="fas fa-file-archive"></i> Archives
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="newFolderBtn">
+                    <i class="fas fa-folder-plus"></i> New Folder
+                </button>
+                <button class="btn btn-success" id="uploadBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload
+                </button>
+            </div>
+        </div>
+
+        <!-- File Browser -->
+        <div class="file-browser">
+            <div class="browser-header">
+                <div class="browser-title">My Files</div>
+                <div class="view-options">
+                    <div class="view-btn active" id="gridViewBtn">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <div class="view-btn" id="listViewBtn">
+                        <i class="fas fa-list"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="breadcrumb-separator">/</div>
+                <div class="breadcrumb-item">
+                    <span>Documents</span>
+                </div>
+                <div class="breadcrumb-separator">/</div>
+                <div class="breadcrumb-item">
+                    <span>Projects</span>
+                </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    Drag & drop files here or click to browse
+                </div>
+                <button class="upload-btn">Browse Files</button>
+                <input type="file" id="fileInput" style="display: none;" multiple>
+            </div>
+
+            <!-- Files Grid View -->
+            <div class="files-grid" id="filesGridView">
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-folder pdf-icon"></i>
+                    </div>
+                    <div class="file-name">Client Projects</div>
+                    <div class="file-meta">12 items</div>
+                </div>
+                
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                    </div>
+                    <div class="file-name">Project Proposal.pdf</div>
+                    <div class="file-meta">2.4 MB · 2 days ago</div>
+                </div>
+                
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-word doc-icon"></i>
+                    </div>
+                    <div class="file-name">Contract Draft.docx</div>
+                    <div class="file-meta">1.8 MB · 1 week ago</div>
+                </div>
+                
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-excel doc-icon"></i>
+                    </div>
+                    <div class="file-name">Budget Sheet.xlsx</div>
+                    <div class="file-meta">3.2 MB · 3 days ago</div>
+                </div>
+                
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-image img-icon"></i>
+                    </div>
+                    <div class="file-name">Design Mockup.png</div>
+                    <div class="file-meta">4.7 MB · 5 days ago</div>
+                </div>
+                
+                <div class="file-card">
+                    <div class="file-icon">
+                        <i class="fas fa-file-archive zip-icon"></i>
+                    </div>
+                    <div class="file-name">Assets Package.zip</div>
+                    <div class="file-meta">18.5 MB · 2 weeks ago</div>
+                </div>
+            </div>
+
+            <!-- Files List View -->
+            <div class="files-list" id="filesListView">
+                <div class="list-header">
+                    <div>Name</div>
+                    <div>Size</div>
+                    <div>Modified</div>
+                    <div>Shared</div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-folder pdf-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Client Projects</div>
+                            <div class="file-desc">Folder</div>
+                        </div>
+                    </div>
+                    <div class="file-size">-</div>
+                    <div class="file-modified">2 days ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user-friends" style="color: var(--primary);"></i>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-file-pdf pdf-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Project Proposal.pdf</div>
+                            <div class="file-desc">PDF Document</div>
+                        </div>
+                    </div>
+                    <div class="file-size">2.4 MB</div>
+                    <div class="file-modified">2 days ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user" style="color: var(--gray);"></i>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-file-word doc-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Contract Draft.docx</div>
+                            <div class="file-desc">Word Document</div>
+                        </div>
+                    </div>
+                    <div class="file-size">1.8 MB</div>
+                    <div class="file-modified">1 week ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user-friends" style="color: var(--primary);"></i>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-file-excel doc-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Budget Sheet.xlsx</div>
+                            <div class="file-desc">Excel Spreadsheet</div>
+                        </div>
+                    </div>
+                    <div class="file-size">3.2 MB</div>
+                    <div class="file-modified">3 days ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user" style="color: var(--gray);"></i>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-file-image img-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Design Mockup.png</div>
+                            <div class="file-desc">PNG Image</div>
+                        </div>
+                    </div>
+                    <div class="file-size">4.7 MB</div>
+                    <div class="file-modified">5 days ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user-friends" style="color: var(--primary);"></i>
+                    </div>
+                </div>
+                
+                <div class="file-row">
+                    <div class="file-info">
+                        <div class="file-type-icon">
+                            <i class="fas fa-file-archive zip-icon"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-title">Assets Package.zip</div>
+                            <div class="file-desc">ZIP Archive</div>
+                        </div>
+                    </div>
+                    <div class="file-size">18.5 MB</div>
+                    <div class="file-modified">2 weeks ago</div>
+                    <div class="file-shared">
+                        <i class="fas fa-user" style="color: var(--gray);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <div class="section-header">
+                <div class="section-title">Recent Activity</div>
+                <div class="view-all">View All</div>
+            </div>
+            
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="activity-info">
+                        <div class="activity-text">You uploaded "Project Proposal.pdf"</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div class="activity-info">
+                        <div class="activity-text">You shared "Design Mockup.png" with Sarah Johnson</div>
+                        <div class="activity-time">Yesterday at 3:45 PM</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <div class="activity-info">
+                        <div class="activity-text">Michael Taylor downloaded "Contract Draft.docx"</div>
+                        <div class="activity-time">Monday at 10:30 AM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 ShareFlow Pro. All rights reserved.</p>
+            <p>Need help? Contact support@shareflowpro.com or call (555) 123-4567</p>
+        </div>
+    </div>
+
+    <!-- New Folder Modal -->
+    <div class="modal" id="newFolderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Folder</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Folder Name</label>
+                    <input type="text" class="form-input" placeholder="Enter folder name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Create Folder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share File Modal -->
+    <div class="modal" id="shareFileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Share File</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">File Name</label>
+                    <input type="text" class="form-input" value="Project Proposal.pdf" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Share With</label>
+                    <select class="form-select">
+                        <option>Select team member</option>
+                        <option>Sarah Johnson</option>
+                        <option>Michael Taylor</option>
+                        <option>Emily Roberts</option>
+                        <option>John Doe</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Permissions</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="viewPermission" checked>
+                            <label for="viewPermission">Can view</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="editPermission">
+                            <label for="editPermission">Can edit</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="downloadPermission" checked>
+                            <label for="downloadPermission">Can download</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Message (optional)</label>
+                    <textarea class="form-input" placeholder="Add a message to the recipient" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #e5e7eb;">Cancel</button>
+                <button class="btn btn-primary">Share File</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // View toggle functionality
+        const gridViewBtn = document.getElementById('gridViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+        const filesGridView = document.getElementById('filesGridView');
+        const filesListView = document.getElementById('filesListView');
+
+        gridViewBtn.addEventListener('click', function() {
+            this.classList.add('active');
+            listViewBtn.classList.remove('active');
+            filesGridView.style.display = 'grid';
+            filesListView.style.display = 'none';
+        });
+
+        listViewBtn.addEventListener('click', function() {
+            this.classList.add('active');
+            gridViewBtn.classList.remove('active');
+            filesListView.style.display = 'flex';
+            filesGridView.style.display = 'none';
+        });
+
+        // New Folder Modal
+        document.getElementById('newFolderBtn').addEventListener('click', function() {
+            document.getElementById('newFolderModal').style.display = 'flex';
+        });
+
+        // Upload functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                alert(`Selected ${this.files.length} file(s) for upload. In a real application, this would upload the files.`);
+            }
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#6366f1';
+            this.style.backgroundColor = '#f9fafb';
+        });
+        
+        uploadArea.addEventListener('dragleave', function() {
+            this.style.borderColor = '#e5e7eb';
+            this.style.backgroundColor = 'transparent';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#e5e7eb';
+            this.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                alert(`Dropped ${e.dataTransfer.files.length} file(s) for upload. In a real application, this would upload the files.`);
+            }
+        });
+
+        // File card click to open share modal
+        document.querySelectorAll('.file-card, .file-row').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't trigger if clicking on action buttons inside
+                if (!e.target.closest('.file-actions')) {
+                    document.getElementById('shareFileModal').style.display = 'flex';
+                }
+            });
+        });
+
+        // Close modals
+        document.querySelectorAll('.modal-close, .modal .btn:not(.btn-primary)').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+
+        // Close modal if clicked outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Filter buttons functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all filter buttons in the same group
+                this.parentElement.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real app, this would filter the files
+                const filterType = this.textContent.trim();
+                alert(`Filtering by: ${filterType}. In a real application, this would filter the file list.`);
+            });
+        });
+
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const pageName = this.querySelector('.nav-text').textContent;
+                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
