@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - ShareFlow Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --success: #059669;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            padding: 10px 16px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            color: var(--dark);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 18px;
+            color: var(--gray);
+            margin-right: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Help Sections */
+        .help-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .help-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .card-link {
+            color: var(--primary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-link i {
+            margin-left: 8px;
+            transition: transform 0.2s;
+        }
+
+        .card-link:hover i {
+            transform: translateX(4px);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .faq-item {
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px;
+            background: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .faq-answer {
+            padding: 0 16px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 16px;
+            max-height: 300px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Contact Form */
+        .contact-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 32px;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .resource-item:hover {
+            border-color: var(--primary);
+            background: #f9fafb;
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .help-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 16px 0;
+            }
+            
+            .user-menu {
+                align-self: flex-end;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toggle for mobile */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="logo-text">ShareFlow Pro</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="nav-text">Projects</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            <div class="nav-text">Invoices</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-comments"></i></div>
+            <div class="nav-text">Messages</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
+            <div class="nav-text">Contracts</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <div class="nav-text">File Sharing</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="nav-text">Calendar</div>
+        </div>
+        
+        <div class="nav-item">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <div class="nav-text">Settings</div>
+        </div>
+        
+        <div class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
+            <div class="nav-text">Help & Support</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">Help & Support</h1>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search help articles...">
+            </div>
+            
+            <div class="user-menu">
+                <div class="notification-bell">
+                    <i class="far fa-bell"></i>
+                    <div class="notification-badge">3</div>
+                </div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+
+        <!-- Help Cards -->
+        <div class="help-container">
+            <div class="help-card">
+                <div class="card-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="card-title">Knowledge Base</h3>
+                <p class="card-desc">Browse our comprehensive guides and tutorials to learn how to use ShareFlow Pro effectively.</p>
+                <a href="#" class="card-link">View Knowledge Base <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3 class="card-title">Video Tutorials</h3>
+                <p class="card-desc">Watch step-by-step video guides to master all features of ShareFlow Pro.</p>
+                <a href="#" class="card-link">Watch Tutorials <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="card-title">Community Forum</h3>
+                <p class="card-desc">Connect with other users, ask questions, and share tips and best practices.</p>
+                <a href="#" class="card-link">Join Community <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="help-card">
+                <div class="card-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3 class="card-title">Live Chat</h3>
+                <p class="card-desc">Get instant help from our support team through live chat during business hours.</p>
+                <a href="#" class="card-link">Start Chat <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I create a new project?
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    To create a new project, go to the Projects page and click the "New Project" button. Fill in the project details, add team members, and set the project timeline. You can then start adding tasks and milestones to your project.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How can I share files with my team?
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    You can share files by going to the File Sharing page. Click the "Upload" button to select files from your computer. Once uploaded, you can organize files into folders and share them with specific team members or the entire team.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I set up automatic invoicing?
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    To set up automatic invoicing, go to the Invoices page and click on "Automation Settings". From there, you can configure recurring invoices, set payment reminders, and automate billing for regular clients.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I integrate ShareFlow Pro with other tools?
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    Yes, ShareFlow Pro offers integrations with popular tools like Google Calendar, Microsoft Outlook, Zoom, Slack, and more. You can configure these integrations in the Settings page under the "Integrations" tab.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    How secure is my data in ShareFlow Pro?
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    We take security seriously. All data is encrypted in transit and at rest. We use industry-standard security practices including regular security audits, two-factor authentication, and role-based access controls to keep your data safe.
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-section">
+            <h2 class="section-title">Contact Support</h2>
+            
+            <form id="supportForm">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" placeholder="Your name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="Your email address">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <select class="form-select">
+                        <option>General Question</option>
+                        <option>Technical Issue</option>
+                        <option>Billing Inquiry</option>
+                        <option>Feature Request</option>
+                        <option>Bug Report</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-textarea" placeholder="Please describe your issue or question in detail"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Attachment (optional)</label>
+                    <input type="file" class="form-input">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="resources-section">
+            <h2 class="section-title">Helpful Resources</h2>
+            
+            <div class="resources-grid">
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">User Manual</div>
+                        <div class="resource-desc">Complete guide to all features</div>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">API Documentation</div>
+                        <div class="resource-desc">Developer resources and APIs</div>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">Training Webinars</div>
+                        <div class="resource-desc">Live and recorded training sessions</div>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">Best Practices</div>
+                        <div class="resource-desc">Tips for getting the most value</div>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">Templates</div>
+                        <div class="resource-desc">Ready-to-use project templates</div>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <div class="resource-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="resource-info">
+                        <div class="resource-title">Mobile App</div>
+                        <div class="resource-desc">Get our mobile application</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 ShareFlow Pro. All rights reserved.</p>
+            <p>Need immediate help? Contact support@shareflowpro.com or call (555) 123-4567</p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                
+                // Toggle active class
+                item.classList.toggle('active');
+                
+                // Toggle answer visibility
+                if (item.classList.contains('active')) {
+                    answer.classList.add('active');
+                } else {
+                    answer.classList.remove('active');
+                }
+                
+                // Close other FAQs
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Form submission
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! Our support team will get back to you within 24 hours.');
+            this.reset();
+        });
+        
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    const pageName = this.querySelector('.nav-text').textContent;
+                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
