@@ -65,8 +65,11 @@
             font-weight: 700;
         }
 
-        .nav-item {
+        .nav-link {
+            display: block;
             padding: 14px 24px;
+            color: white;
+            text-decoration: none;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -74,13 +77,17 @@
             border-left: 4px solid transparent;
         }
 
-        .nav-item:hover {
+        .nav-link:hover {
             background: rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            color: white;
         }
 
-        .nav-item.active {
+        .nav-link.active {
             background: rgba(255, 255, 255, 0.1);
             border-left: 4px solid var(--primary);
+            color: white;
+            text-decoration: none;
         }
 
         .nav-icon {
@@ -737,50 +744,50 @@
             <div class="logo-text">ShareFlow Pro</div>
         </div>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/dashboard.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-home"></i></div>
             <div class="nav-text">Dashboard</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/project.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
             <div class="nav-text">Projects</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/invoice.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
             <div class="nav-text">Invoices</div>
-        </div>
+        </a>
         
-        <div class="nav-item active">
+        <a href="https://faxingberling1.github.io/crm/client/messaging.html" class="nav-link active">
             <div class="nav-icon"><i class="fas fa-comments"></i></div>
             <div class="nav-text">Messages</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/contract.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
             <div class="nav-text">Contracts</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/filesharing.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
             <div class="nav-text">File Sharing</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/calendar.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
             <div class="nav-text">Calendar</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/settings.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-cog"></i></div>
             <div class="nav-text">Settings</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/help.html" class="nav-link">
             <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
             <div class="nav-text">Help & Support</div>
-        </div>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -1212,21 +1219,6 @@
             setTimeout(() => {
                 showTypingIndicator();
             }, 1000);
-        });
-
-        // Navigation items
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                if (!this.classList.contains('active')) {
-                    const pageName = this.querySelector('.nav-text').textContent;
-                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
-                    
-                    document.querySelectorAll('.nav-item').forEach(i => {
-                        i.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                }
-            });
         });
 
         // Initialize scroll to bottom
