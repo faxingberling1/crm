@@ -72,6 +72,8 @@
             cursor: pointer;
             transition: all 0.2s;
             border-left: 4px solid transparent;
+            text-decoration: none;
+            color: white;
         }
 
         .nav-item:hover {
@@ -614,50 +616,50 @@
             <div class="logo-text">ShareFlow Pro</div>
         </div>
         
-        <div class="nav-item active">
+        <a href="https://faxingberling1.github.io/crm/client/dashboard.html" class="nav-item active">
             <div class="nav-icon"><i class="fas fa-home"></i></div>
             <div class="nav-text">Dashboard</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/project.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-project-diagram"></i></div>
             <div class="nav-text">Projects</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/invoice.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></div>
             <div class="nav-text">Invoices</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/messaging.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-comments"></i></div>
             <div class="nav-text">Messages</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/contract.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-file-contract"></i></div>
             <div class="nav-text">Contracts</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="#" class="nav-item">
             <div class="nav-icon"><i class="fas fa-cloud-upload-alt"></i></div>
             <div class="nav-text">File Sharing</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/calendar.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
             <div class="nav-text">Calendar</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/settings.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-cog"></i></div>
             <div class="nav-text">Settings</div>
-        </div>
+        </a>
         
-        <div class="nav-item">
+        <a href="https://faxingberling1.github.io/crm/client/help.html" class="nav-item">
             <div class="nav-icon"><i class="fas fa-question-circle"></i></div>
             <div class="nav-text">Help & Support</div>
-        </div>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -893,7 +895,7 @@
             </div>
             
             <div class="actions-grid">
-                <div class="action-card">
+                <div class="action-card" onclick="window.location.href='https://faxingberling1.github.io/crm/client/messaging.html'">
                     <div class="action-icon">
                         <i class="fas fa-comments"></i>
                     </div>
@@ -909,7 +911,7 @@
                     <div class="action-desc">Upload and share files with your team</div>
                 </div>
                 
-                <div class="action-card">
+                <div class="action-card" onclick="window.location.href='https://faxingberling1.github.io/crm/client/calendar.html'">
                     <div class="action-icon">
                         <i class="fas fa-calendar"></i>
                     </div>
@@ -917,7 +919,7 @@
                     <div class="action-desc">Schedule a call with your project manager</div>
                 </div>
                 
-                <div class="action-card">
+                <div class="action-card" onclick="window.location.href='https://faxingberling1.github.io/crm/client/invoice.html'">
                     <div class="action-icon">
                         <i class="fas fa-file-invoice"></i>
                     </div>
@@ -942,22 +944,29 @@
         // Simple interactivity for the dashboard
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('click', function() {
-                alert('Project details would be shown here. In a real application, this would open a project detail view.');
+                window.location.href = 'https://faxingberling1.github.io/crm/client/project.html';
             });
         });
 
         document.querySelectorAll('.contact-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const memberName = this.closest('.team-member').querySelector('.member-name').textContent;
-                alert(`Message composer would open for ${memberName}. In a real application, this would open a messaging interface.`);
+                window.location.href = 'https://faxingberling1.github.io/crm/client/messaging.html';
             });
         });
 
         document.querySelectorAll('.action-card').forEach(card => {
             card.addEventListener('click', function() {
                 const actionTitle = this.querySelector('.action-title').textContent;
-                alert(`${actionTitle} functionality would be activated here. In a real application, this would open the appropriate interface.`);
+                if (actionTitle === 'View Invoices') {
+                    window.location.href = 'https://faxingberling1.github.io/crm/client/invoice.html';
+                } else if (actionTitle === 'Schedule Meeting') {
+                    window.location.href = 'https://faxingberling1.github.io/crm/client/calendar.html';
+                } else if (actionTitle === 'Message Team') {
+                    window.location.href = 'https://faxingberling1.github.io/crm/client/messaging.html';
+                } else {
+                    alert(`${actionTitle} functionality would be activated here. In a real application, this would open the appropriate interface.`);
+                }
             });
         });
 
@@ -965,22 +974,25 @@
             button.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const sectionTitle = this.closest('.section-header').querySelector('.section-title').textContent;
-                alert(`View all ${sectionTitle.toLowerCase()} would be shown here. In a real application, this would navigate to a dedicated page.`);
+                if (sectionTitle === 'Active Projects' || sectionTitle === 'Your Team') {
+                    window.location.href = 'https://faxingberling1.github.io/crm/client/project.html';
+                } else if (sectionTitle === 'Recent Activity') {
+                    window.location.href = 'https://faxingberling1.github.io/crm/client/messaging.html';
+                } else {
+                    alert(`View all ${sectionTitle.toLowerCase()} would be shown here. In a real application, this would navigate to a dedicated page.`);
+                }
             });
         });
 
         // Notification bell interaction
         document.querySelector('.notification-bell').addEventListener('click', function() {
-            alert('Notifications panel would open here. In a real application, this would show a dropdown with notifications.');
+            window.location.href = 'https://faxingberling1.github.io/crm/client/messaging.html';
         });
 
         // Navigation items
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
                 if (!this.classList.contains('active')) {
-                    const pageName = this.querySelector('.nav-text').textContent;
-                    alert(`Navigating to ${pageName} page. In a real application, this would load the appropriate page.`);
-                    
                     document.querySelectorAll('.nav-item').forEach(i => {
                         i.classList.remove('active');
                     });
